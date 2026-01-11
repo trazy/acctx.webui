@@ -9,16 +9,34 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as UiComponentsRouteImport } from './routes/ui-components'
 import { Route as SignInRouteImport } from './routes/sign-in'
+import { Route as ContractReviewPreviewRouteImport } from './routes/contract-review-preview'
+import { Route as ChatPreviewRouteImport } from './routes/chat-preview'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DemoStorybookRouteImport } from './routes/demo/storybook'
 import { Route as DemoFormSimpleRouteImport } from './routes/demo/form.simple'
 import { Route as DemoFormAddressRouteImport } from './routes/demo/form.address'
 
+const UiComponentsRoute = UiComponentsRouteImport.update({
+  id: '/ui-components',
+  path: '/ui-components',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SignInRoute = SignInRouteImport.update({
   id: '/sign-in',
   path: '/sign-in',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContractReviewPreviewRoute = ContractReviewPreviewRouteImport.update({
+  id: '/contract-review-preview',
+  path: '/contract-review-preview',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChatPreviewRoute = ChatPreviewRouteImport.update({
+  id: '/chat-preview',
+  path: '/chat-preview',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
@@ -48,14 +66,20 @@ const DemoFormAddressRoute = DemoFormAddressRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/chat-preview': typeof ChatPreviewRoute
+  '/contract-review-preview': typeof ContractReviewPreviewRoute
   '/sign-in': typeof SignInRoute
+  '/ui-components': typeof UiComponentsRoute
   '/demo/storybook': typeof DemoStorybookRoute
   '/demo/form/address': typeof DemoFormAddressRoute
   '/demo/form/simple': typeof DemoFormSimpleRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/chat-preview': typeof ChatPreviewRoute
+  '/contract-review-preview': typeof ContractReviewPreviewRoute
   '/sign-in': typeof SignInRoute
+  '/ui-components': typeof UiComponentsRoute
   '/demo/storybook': typeof DemoStorybookRoute
   '/demo/form/address': typeof DemoFormAddressRoute
   '/demo/form/simple': typeof DemoFormSimpleRoute
@@ -64,7 +88,10 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRoute
+  '/chat-preview': typeof ChatPreviewRoute
+  '/contract-review-preview': typeof ContractReviewPreviewRoute
   '/sign-in': typeof SignInRoute
+  '/ui-components': typeof UiComponentsRoute
   '/demo/storybook': typeof DemoStorybookRoute
   '/demo/form/address': typeof DemoFormAddressRoute
   '/demo/form/simple': typeof DemoFormSimpleRoute
@@ -73,14 +100,20 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/chat-preview'
+    | '/contract-review-preview'
     | '/sign-in'
+    | '/ui-components'
     | '/demo/storybook'
     | '/demo/form/address'
     | '/demo/form/simple'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/chat-preview'
+    | '/contract-review-preview'
     | '/sign-in'
+    | '/ui-components'
     | '/demo/storybook'
     | '/demo/form/address'
     | '/demo/form/simple'
@@ -88,7 +121,10 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/chat-preview'
+    | '/contract-review-preview'
     | '/sign-in'
+    | '/ui-components'
     | '/demo/storybook'
     | '/demo/form/address'
     | '/demo/form/simple'
@@ -97,7 +133,10 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRoute
+  ChatPreviewRoute: typeof ChatPreviewRoute
+  ContractReviewPreviewRoute: typeof ContractReviewPreviewRoute
   SignInRoute: typeof SignInRoute
+  UiComponentsRoute: typeof UiComponentsRoute
   DemoStorybookRoute: typeof DemoStorybookRoute
   DemoFormAddressRoute: typeof DemoFormAddressRoute
   DemoFormSimpleRoute: typeof DemoFormSimpleRoute
@@ -105,11 +144,32 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/ui-components': {
+      id: '/ui-components'
+      path: '/ui-components'
+      fullPath: '/ui-components'
+      preLoaderRoute: typeof UiComponentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sign-in': {
       id: '/sign-in'
       path: '/sign-in'
       fullPath: '/sign-in'
       preLoaderRoute: typeof SignInRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contract-review-preview': {
+      id: '/contract-review-preview'
+      path: '/contract-review-preview'
+      fullPath: '/contract-review-preview'
+      preLoaderRoute: typeof ContractReviewPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/chat-preview': {
+      id: '/chat-preview'
+      path: '/chat-preview'
+      fullPath: '/chat-preview'
+      preLoaderRoute: typeof ChatPreviewRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -153,7 +213,10 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRoute,
+  ChatPreviewRoute: ChatPreviewRoute,
+  ContractReviewPreviewRoute: ContractReviewPreviewRoute,
   SignInRoute: SignInRoute,
+  UiComponentsRoute: UiComponentsRoute,
   DemoStorybookRoute: DemoStorybookRoute,
   DemoFormAddressRoute: DemoFormAddressRoute,
   DemoFormSimpleRoute: DemoFormSimpleRoute,
