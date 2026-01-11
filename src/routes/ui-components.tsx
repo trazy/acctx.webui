@@ -1,8 +1,8 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/ui-components')({
   component: RouteComponent,
-})
+});
 
 function RouteComponent() {
   return (
@@ -432,5 +432,5 @@ function RouteComponent() {
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -1,13 +1,13 @@
-import { createFileRoute, redirect } from '@tanstack/react-router'
+import { createFileRoute, redirect } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/sign-in')({
   component: SignInPage,
   async beforeLoad({ context: { auth } }) {
     if (auth.isAuthenticated) {
-      throw redirect({ to: `/` })
+      throw redirect({ to: `/` });
     }
   },
-})
+});
 
 function SignInPage() {
   return (
@@ -20,5 +20,5 @@ function SignInPage() {
         <form></form>
       </div>
     </div>
-  )
+  );
 }
