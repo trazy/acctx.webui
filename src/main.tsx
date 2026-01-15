@@ -1,17 +1,18 @@
-import { StrictMode } from 'react';
-import ReactDOM from 'react-dom/client';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
+import { StrictMode, type FC } from 'react';
+import ReactDOM from 'react-dom/client';
 
 // Import the generated route tree
 import { routeTree } from './routeTree.gen';
 
-import './styles.css';
+import { AuthProvider, useAuth } from './auth.tsx';
 import reportWebVitals from './reportWebVitals.ts';
+import './styles.css';
 
 // Create a new router instance
 const router = createRouter({
   routeTree,
-  context: {},
+  context: { auth: undefined! },
   defaultPreload: 'intent',
   scrollRestoration: true,
   defaultStructuralSharing: true,
@@ -25,13 +26,23 @@ declare module '@tanstack/react-router' {
   }
 }
 
+const AppWrapper: FC = () => {
+  const auth = useAuth();
+  if (auth.loading) {
+    return <div>loading...</div>;
+  }
+  return <RouterProvider router={router} context={{ auth }} />;
+};
+
 // Render the app
 const rootElement = document.getElementById('app');
 if (rootElement && !rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <StrictMode>
-      <RouterProvider router={router} />
+      <AuthProvider>
+        <AppWrapper />
+      </AuthProvider>
     </StrictMode>,
   );
 }

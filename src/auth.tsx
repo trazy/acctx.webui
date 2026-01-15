@@ -5,6 +5,10 @@ import React, {
   useState,
   type PropsWithChildren,
 } from 'react';
+import type { User } from './schemas/auth/user';
+import { apiUserGetMe } from './api/user';
+import { pipe } from './lib/fp/func';
+import { Either } from './lib/fp/either';
 
 export type AuthContextType =
   | {
@@ -18,34 +22,37 @@ export type AuthContextType =
       loading: boolean;
     };
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<AuthContextType | undefined>({
+  isAuthenticated: false,
+  user: null,
+  loading: false,
+});
 
 export function AuthProvider({ children }: PropsWithChildren<{}>) {
   const [state, setState] = useState<{
     loading: boolean;
-    session: Session | null;
-  }>({ loading: true, session: null });
+    user: User | null;
+  }>({ loading: true, user: null });
 
   useEffect(() => {
     // 초기 세션 확인
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setState({ session: session, loading: false });
-    });
-
-    // 인증 상태 변경 리스너
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setState((prev) => ({ ...prev, session }));
-    });
-
-    return () => subscription.unsubscribe();
+    apiUserGetMe().then(
+      pipe(
+        Either.fold(
+          (error) => {
+            console.error(error);
+            setState({ loading: false, user: null });
+          },
+          (user) => setState({ loading: false, user: user }),
+        ),
+      ),
+    );
   }, []);
 
   return (
     <AuthContext.Provider
       value={
-        !state.session
+        !state.user
           ? {
               isAuthenticated: false,
               user: null,
@@ -53,7 +60,7 @@ export function AuthProvider({ children }: PropsWithChildren<{}>) {
             }
           : {
               isAuthenticated: true,
-              user: state.session.user,
+              user: state.user,
               loading: state.loading,
             }
       }
